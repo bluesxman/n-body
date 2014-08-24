@@ -18,7 +18,10 @@
   (map / v1 v2))
 
 (defn magnitude [v]
-  (Math/sqrt (apply + (map #(* % %) v))))
+  (Math/sqrt mag-squared))
+
+(defn mag-squared [v]
+  (apply + (map #(* % %) v)))
 
 (defn vunit [v]
   (scale v (/ 1 (magnitude v))))
@@ -36,11 +39,11 @@
   ;; v = F * dt / m + v0
   (vadd (vdiv (scale net-force delta-t) mass) vel-initial))
 
-;; force vector pointing from m1 to m2
-(defn gravity [m1 m2 p1 p2]
+(defn gravity
+  "force vector pointing from p1 to p2"
+  [m1 m2 p1 p2]
   (let [dist-vec (vsub p2 p1)
-        distance (magnitude dist-vec)
-        f-scalar (/ (* grav-const m1 m2) (* distance distance))
+        f-scalar (/ (* grav-const m1 m2) (mag-squared dist-vec))
         direction (vunit dist-vec)]
     (scale direction f-scalar)))
 
@@ -82,6 +85,13 @@
 
 (let [[p1 psig1] (psig 5)]
   (psig1 7))
+
+
+(defn lift [fun sig]
+  (fn [t]
+    (let [[value next-sig] (sig t)]
+      [(fun value) (lift fun next-sig)])))
+
 
 ;; time is an event stream.  when time changes all dependencies should be updated.
 ;; dependencies should subscribe to the time channel.  clock thread which creates
