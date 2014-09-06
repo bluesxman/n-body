@@ -1,5 +1,5 @@
-(ns n-body.sim
-  (:require [n-body.physics :refer :all]))
+(ns nbody.sim
+  (:require [nbody.physics :refer :all]))
 
 
 (defn net-gravity [p1 particles]
@@ -74,8 +74,13 @@
 (foo (/ Math/PI 2) 1)
 (foo (/ (- Math/PI) 2) 1)
 
+(def sol-particles
+  (into {} (map #(update-in % [1] body->particle) sol-system)))
+
+
 (loop [m sol-system
        ks (keys sol-system)]
   (if (empty? ks)
     m
     (recur (update-in m [(first ks)] body->particle) (rest ks))))
+(into {} (map #(update-in % [1] body->particle) sol-system))

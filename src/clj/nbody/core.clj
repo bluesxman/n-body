@@ -1,4 +1,4 @@
-(ns n-body.core
+(ns nbody.core
 ;;   (:require [clojure.string :refer :all]))
   (:require [clojure.core.async :refer [chan pub sub]]))
 

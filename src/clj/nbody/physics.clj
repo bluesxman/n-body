@@ -1,4 +1,4 @@
-(ns n-body.physics)
+(ns nbody.physics)
 
 ;;
 ;; Vector math helpers
