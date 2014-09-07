@@ -2,14 +2,14 @@
   (:require [quil.core :as q]
             [nbody.sim :as s]))
 
-(def screen-w 640)
-(def screen-h 640)
+(def screen-w 1360)
+(def screen-h 768)
 (def screen-center [(/ screen-w 2.0) (/ screen-h 2.0)])
 
 
 (def yellow [255 255 0])
 (def yellow-orange [225 175 0])
-(def light-blue [100 100 255])
+(def blue [0 0 255])
 (def red [255 75 0])
 (def blue-green [0 200 150])
 (def yellow-green [125 255 0])
@@ -19,7 +19,7 @@
   {:sun yellow
    :jupiter yellow-orange
    :saturn yellow-orange
-   :earth light-blue
+   :earth blue
    :mars red
    :uranus blue-green
    :neptune blue-green
@@ -51,9 +51,11 @@
   (q/lights)
   (q/background 0)
   (q/no-stroke)
-  (apply q/translate (conj screen-center -1200))
 
-  (doseq [b (swap! bodies s/inc-time (* 5 s/day))]
+  (apply q/translate (conj screen-center -2500))
+  (q/rotate-x 1.45)
+
+  (doseq [b (swap! bodies s/inc-time (* 20 s/day))]
     (render-body b)))
 
 (q/defsketch solar-system
