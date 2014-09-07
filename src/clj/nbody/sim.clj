@@ -7,12 +7,7 @@
         forces (for [{m2 :mass p2 :position} particles
                      :when (not= p1 p2)]
                  (gravity m1 m2 p1 p2))]
-
-;;     forces
-    (reduce vadd forces)
-    ))
-
-(net-gravity (first sol-particles) sol-particles)
+    (reduce vadd forces)))
 
 (defn accel-particle [particle force dt]
   (let [{mass :mass v0 :velocity} particle]
@@ -25,9 +20,6 @@
 (defn accelerate [particles dt]
   (map #(accel-particle % (net-gravity % particles) dt) particles))
 
-(map #(net-gravity % sol-particles) sol-particles)
-(accel-particle (first sol-particles) '(-1.3910009732229538E20 -9.459471068622453E19) day)
-
 (defn move-particle [particle dt]
   (let [{p0 :position vel :velocity} particle]
     (assoc particle :position (position p0 vel dt))))
@@ -37,30 +29,13 @@
 (defn translate [particles dt]
     (map #(move-particle % dt) particles))
 
-;; Repeat:
-;; render all particles
-;; For each particle
-;; accelerate by net force of gravity on that particle
-;; translate position by new velocity
-;; (defn run [particles timestep]
-;;   (render particles)
-;;   (let [next-particles (->             ;; translate(accelerate(particles dt), dt)
-;;                          particles
-;;                          (accelerate timestep)
-;;                          (translate timestep))]
-;;     (recur next-particles timestep)))
-
 (def day (* 24 60 60))
-(def time-step (* 1 day))
 
 (defn inc-time [particles timestep]
   (->
    particles
    (accelerate timestep)
    (translate timestep)))
-
-(inc-time sol-particles day)
-(accelerate sol-particles day)
 
 (def sol-system
   (list
@@ -83,5 +58,3 @@
 
 (def sol-particles
   (into (list) (map body->particle sol-system)))
-
-(seq sol-particles)
