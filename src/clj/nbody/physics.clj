@@ -19,7 +19,7 @@
   (apply + (map #(* % %) v)))
 
 (defn magnitude [v]
-  (Math/sqrt mag-squared))
+  (Math/sqrt (mag-squared v)))
 
 (defn vunit [v]
   (scale v (/ 1 (magnitude v))))
@@ -35,7 +35,7 @@
 
 (defn velocity [mass vel-initial net-force delta-t]
   ;; v = F * dt / m + v0
-  (vadd (vdiv (scale net-force delta-t) mass) vel-initial))
+  (vadd (scale net-force (/ delta-t mass)) vel-initial))
 
 (defn gravity
   "force vector pointing from p1 to p2"
