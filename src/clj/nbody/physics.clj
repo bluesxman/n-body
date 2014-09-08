@@ -28,13 +28,10 @@
 ;;
 ;; Simplistic physics
 ;;
-(def grav-const (* 2 6.67384e-11))
+(def grav-const 6.67384e-11)
 
-(defn position [pos-initial vel delta-t]
-  (vadd pos-initial (scale vel delta-t)))
-
-;; (defn position [p0 v0 accel dt]
-;;   (vadd (vadd p0 (scale v0 dt)) (scale accel (* 0.5 dt dt))))
+(defn position [p0 v1 dt]
+  (vadd p0 (scale v1 dt)))
 
 (defn velocity [mass vel-initial net-force delta-t]
   ;; v = F * dt / m + v0

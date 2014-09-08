@@ -9,33 +9,15 @@
                  (gravity m1 m2 p1 p2))]
     (reduce vadd forces)))
 
-(defn accel-particle [particle force dt]
-  (let [{mass :mass v0 :velocity} particle]
-    (assoc particle :velocity (velocity mass v0 force dt))))
-
-;; for each particle
-;; for each other particle
-;; sum the force of gravity of the second particle on the first
-;; modify the first particle's velocity by applying the net force to its mass
-(defn accelerate [particles dt]
-  (map #(accel-particle % (net-gravity % particles) dt) particles))
-
-(defn move-particle [particle dt]
-  (let [{p0 :position vel :velocity} particle]
-    (assoc particle :position (position p0 vel dt))))
-
-;; for each particle
-;; move the particle by its velocity vector for an amount of time
-(defn translate [particles dt]
-    (map #(move-particle % dt) particles))
-
 (def day (* 24 60 60))
 
-(defn inc-time [particles timestep]
-  (->
-   particles
-   (accelerate timestep)
-   (translate timestep)))
+(defn inc-time [particles time-step]
+  (for [particle0 particles
+        :let [grav (net-gravity particle0 particles)
+              {mass :mass vel0 :velocity pos0 :position} particle0
+              new-vel (velocity mass vel0 grav time-step)
+              new-pos (position pos0 new-vel time-step)]]
+    (assoc particle0 :position new-pos :velocity new-vel)))
 
 (def sol-system
   (list
@@ -50,7 +32,7 @@
    {:name :neptune :mass 1.0243e26 :speed  5430 :semi-major 4498542600e3}))
 
 (defn body->particle [{name :name mass :mass speed :speed smaj :semi-major}]
-  (let [radius (* smaj 2)  ;; fudge by treating ellipse as circle
+  (let [radius smaj  ;; fudge by treating ellipse as circle
         phi (- (* Math/PI 2 (rand)) Math/PI)  ;; vary from -PI to PI
         vel [(- (* speed (Math/sin phi))) (* speed (Math/cos phi))] ;; counter-clockwise
         pos [(* radius (Math/cos phi)) (* radius (Math/sin phi))]]

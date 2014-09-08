@@ -32,7 +32,7 @@
   (q/frame-rate 120))
 
 (defn universe->screen [ux uy]
-  (let [scale (* 2.0 screen-w (/ 1.0 1.0e13))]
+  (let [scale (* 4.0 screen-w (/ 1.0 1.0e13))]
     [(* scale ux) (* scale uy)]))
 
 (def bodies (atom s/sol-particles))
