@@ -53,9 +53,9 @@
   (q/no-stroke)
 
   (apply q/translate (conj screen-center -2500))
-  (q/rotate-x 1.45)
+;;   (q/rotate-x 1.45)
 
-  (doseq [b (swap! bodies s/inc-time (* 20 s/day))]
+  (doseq [b (swap! bodies s/inc-time (* 2 s/day))]
     (render-body b)))
 
 (q/defsketch solar-system
