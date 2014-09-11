@@ -6,4 +6,8 @@
   :dependencies [[org.clojure/clojure "1.6.0"]
                  [org.clojure/core.async "0.1.303.0-886421-alpha"]
                  [quil "2.2.1"]]
-  :source ["src/clj"])
+  :source-paths ["src/clj"]
+;;   :aot :all
+  :aot [nbody.physics nbody.sim nbody.render]
+  :main nbody.render/run
+  )

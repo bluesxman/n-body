@@ -2,10 +2,10 @@
   (:require [quil.core :as q]
             [nbody.sim :as s]))
 
-(def screen-w 1360)
-(def screen-h 768)
+(def screen-w 1300)
+(def screen-h 700)
 (def screen-center [(/ screen-w 2.0) (/ screen-h 2.0)])
-
+(def timestep (* 5 s/day))
 
 (def yellow [255 255 0])
 (def yellow-orange [225 175 0])
@@ -53,14 +53,16 @@
   (q/no-stroke)
 
   (apply q/translate (conj screen-center -2500))
-;;   (q/rotate-x 1.45)
+  (q/rotate-x 1.45)
+  (q/rotate-y 0.3)
 
-  (doseq [b (swap! bodies s/inc-time (* 2 s/day))]
+  (doseq [b (swap! bodies s/inc-time timestep)]
     (render-body b)))
 
-(q/defsketch solar-system
-  :title "Solar System"
-  :setup setup
-  :draw draw
-  :renderer :p3d
-  :size [screen-w screen-h])
+(defn run []
+  (q/sketch
+   :title "Solar System"
+   :setup setup
+   :draw draw
+   :renderer :p3d
+   :size [screen-w screen-h]))

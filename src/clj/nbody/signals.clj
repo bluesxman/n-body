@@ -1,4 +1,4 @@
-(ns n-body.signals)
+(ns nbody.signals)
 
 (defprotocol signal
   (defn value [])
