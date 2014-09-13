@@ -57,8 +57,9 @@
   (let [{uradius :radius} body
         diam (* 2 (universe->screen uradius))]
     (q/push-matrix)
-    (q/stroke 100 255 255 25)
+    (q/stroke 100 255 255 35)
     (q/no-fill)
+    (q/smooth)
     (q/ellipse 0 0 diam diam)
     (q/pop-matrix)))
 
