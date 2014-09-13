@@ -7,7 +7,7 @@
 (def screen-center [(/ screen-w 2.0) (/ screen-h 2.0)])
 (def timestep (* 1 s/day))
 (def mouse-sensitivity (/ Math/PI screen-h 2.0))
-(def wheel-sensitivity 0.1)
+(def wheel-sensitivity 0.05)
 
 (def yellow [255 255 0])
 (def yellow-orange [225 175 0])
@@ -49,7 +49,7 @@
     (q/sphere screen-size)
     (q/pop-matrix)))
 
-(def pitch (atom 0))
+(def pitch (atom 180)) ;; quil is left-handed; start +y-axis up
 (def yaw (atom 0))
 
 (defn update-rot [rot0 pixels]
@@ -59,7 +59,7 @@
   (let [dx (- (q/mouse-x) (q/pmouse-x))
         dy (- (q/mouse-y) (q/pmouse-y))]
     (swap! pitch update-rot dy)
-    (swap! yaw update-rot (- dx))
+    (swap! yaw update-rot dx)
     nil))
 
 (def zoom (atom 1))
@@ -88,4 +88,3 @@
    :mouse-dragged handle-drag
    :mouse-wheel handle-wheel))
 
-(run)
