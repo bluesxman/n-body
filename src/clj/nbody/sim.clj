@@ -39,4 +39,7 @@
     {:name name :mass mass :velocity vel :position pos :radius radius}))
 
 (def sol-particles
-  (into (list) (map body->particle sol-system)))
+  (vec (map body->particle sol-system)))
+
+(seq sol-system)
+(seq sol-particles)

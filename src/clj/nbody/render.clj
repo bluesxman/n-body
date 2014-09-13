@@ -53,14 +53,16 @@
     (q/sphere screen-size)
     (q/pop-matrix)))
 
-(defn render-orbit [body]
+(defn render-orbit [body sun]
   (let [{uradius :radius} body
-        diam (* 2 (universe->screen uradius))]
+        diam (* 2 (universe->screen uradius))
+        {[ux uy] :position} sun
+        [sx sy] (universe->screen ux uy)]
     (q/push-matrix)
     (q/stroke 100 255 255 35)
     (q/no-fill)
     (q/smooth)
-    (q/ellipse 0 0 diam diam)
+    (q/ellipse sx sy diam diam)
     (q/pop-matrix)))
 
 (def pitch (atom 180)) ;; quil is left-handed; start +y-axis up
@@ -90,7 +92,7 @@
   (q/rotate-y @yaw)
 
   (doseq [b (swap! bodies s/inc-time timestep)]
-    (render-orbit b)
+    (render-orbit b (first @bodies))
     (render-body b)))
 
 (defn run []
