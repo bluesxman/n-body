@@ -73,9 +73,10 @@
 
 (defn handle-drag []
   (let [dx (- (q/mouse-x) (q/pmouse-x))
-        dy (- (q/mouse-y) (q/pmouse-y))]
+        dy (- (q/mouse-y) (q/pmouse-y))
+        over? (< (q/mouse-y) (screen-center 1))]
     (swap! pitch update-rot dy)
-    (swap! yaw update-rot dx)
+    (swap! yaw update-rot (if over? (- dx) dx))
     nil))
 
 (def zoom (atom 1))
