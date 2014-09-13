@@ -5,7 +5,9 @@
 (def screen-w 1300)
 (def screen-h 700)
 (def screen-center [(/ screen-w 2.0) (/ screen-h 2.0)])
-(def timestep (* 5 s/day))
+(def timestep (* 1 s/day))
+(def mouse-sensitivity (/ Math/PI screen-h 2.0))
+(def wheel-sensitivity 0.1)
 
 (def yellow [255 255 0])
 (def yellow-orange [225 175 0])
@@ -47,14 +49,31 @@
     (q/sphere screen-size)
     (q/pop-matrix)))
 
+(def pitch (atom 0))
+(def yaw (atom 0))
+
+(defn update-rot [rot0 pixels]
+  (+ rot0 (* mouse-sensitivity pixels)))
+
+(defn handle-drag []
+  (let [dx (- (q/mouse-x) (q/pmouse-x))
+        dy (- (q/mouse-y) (q/pmouse-y))]
+    (swap! pitch update-rot dy)
+    (swap! yaw update-rot (- dx))
+    nil))
+
+(def zoom (atom 1))
+(defn handle-wheel [wheel-rot]
+    (swap! zoom #(+ % (* wheel-rot wheel-sensitivity))))
+
 (defn draw []
   (q/lights)
   (q/background 0)
   (q/no-stroke)
 
-  (apply q/translate (conj screen-center -2500))
-  (q/rotate-x 1.45)
-  (q/rotate-y 0.3)
+  (apply q/translate (conj screen-center (min 500 (* -2500 @zoom))))
+  (q/rotate-x @pitch)
+  (q/rotate-y @yaw)
 
   (doseq [b (swap! bodies s/inc-time timestep)]
     (render-body b)))
@@ -65,4 +84,8 @@
    :setup setup
    :draw draw
    :renderer :p3d
-   :size [screen-w screen-h]))
+   :size [screen-w screen-h]
+   :mouse-dragged handle-drag
+   :mouse-wheel handle-wheel))
+
+(run)
