@@ -36,7 +36,7 @@
         phi (- (* Math/PI 2 (rand)) Math/PI)  ;; vary from -PI to PI
         vel [(- (* speed (Math/sin phi))) (* speed (Math/cos phi))] ;; counter-clockwise
         pos [(* radius (Math/cos phi)) (* radius (Math/sin phi))]]
-    {:name name :mass mass :velocity vel :position pos}))
+    {:name name :mass mass :velocity vel :position pos :radius radius}))
 
 (def sol-particles
   (into (list) (map body->particle sol-system)))

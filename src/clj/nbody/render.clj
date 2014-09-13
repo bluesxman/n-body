@@ -33,9 +33,12 @@
   (q/fill 100 100 255)
   (q/frame-rate 120))
 
-(defn universe->screen [ux uy]
-  (let [scale (* 4.0 screen-w (/ 1.0 1.0e13))]
-    [(* scale ux) (* scale uy)]))
+(def universe-scale (* 4.0 screen-w (/ 1.0 1.0e13)))
+(defn universe->screen
+  ([u]
+   (* universe-scale u))
+  ([ux uy]
+   [(* universe-scale ux) (* universe-scale uy)]))
 
 (def bodies (atom s/sol-particles))
 
@@ -44,9 +47,19 @@
         [sx sy] (universe->screen ux uy)
         screen-size (* screen-w 0.002 (- (Math/log10 mass) 22.5))]
     (q/push-matrix)
+    (q/no-stroke)
     (apply q/fill (colors name))
     (q/translate sx sy)
     (q/sphere screen-size)
+    (q/pop-matrix)))
+
+(defn render-orbit [body]
+  (let [{uradius :radius} body
+        diam (* 2 (universe->screen uradius))]
+    (q/push-matrix)
+    (q/stroke 100 255 255 25)
+    (q/no-fill)
+    (q/ellipse 0 0 diam diam)
     (q/pop-matrix)))
 
 (def pitch (atom 180)) ;; quil is left-handed; start +y-axis up
@@ -76,6 +89,7 @@
   (q/rotate-y @yaw)
 
   (doseq [b (swap! bodies s/inc-time timestep)]
+    (render-orbit b)
     (render-body b)))
 
 (defn run []
@@ -88,3 +102,4 @@
    :mouse-dragged handle-drag
    :mouse-wheel handle-wheel))
 
+(run)
