@@ -106,4 +106,3 @@
    :mouse-dragged handle-drag
    :mouse-wheel handle-wheel))
 
-(run)
