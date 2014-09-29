@@ -12,7 +12,7 @@ OR
 
 1. Install Java 7
 2. Install Light Table (http://www.lighttable.com/)
-3. Select all and hit ctrl-enter for the files:  physics, sim, render
+3. Select all and hit ctrl-enter (<kbd>&#8984;</kbd>-<kbd>enter</kbd> for OSX) for the files:  physics, sim, render
 4. From inside render.clj, type and evaluate the expression: (run)
 5. Play with numbers by using ctrl-enter to evaluate your changes.  See the results live.
 
